@@ -30,14 +30,13 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/auth/**").permitAll()
-                        .anyRequest().authenticated()
-                );
+                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                .requestMatchers("/auth/**").permitAll()
+                .anyRequest().authenticated()
+        );
 
         return http.build();
     }
@@ -65,7 +64,7 @@ public class SecurityConfig {
         CorsConfiguration c = new CorsConfiguration();
 
         // Allow ONLY your frontend
-        c.setAllowedOrigins(List.of("http://localhost:30082"));
+        c.setAllowedOrigins(List.of("*"));
         c.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         c.setAllowedHeaders(List.of("*"));
         c.setAllowCredentials(true);
